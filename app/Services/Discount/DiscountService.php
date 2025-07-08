@@ -6,7 +6,7 @@ use App\Models\Order;
 
 class DiscountService
 {
-    public function applyDiscounts(Order $order, float $subtotal): array
+    public function apply(Order $order, float $subtotal): array
     {
         $appliedDiscounts = [];
 

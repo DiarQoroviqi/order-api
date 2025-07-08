@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\FormatOrder;
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
@@ -26,28 +27,11 @@ class OrderController extends Controller
         ], Response::HTTP_CREATED);
     }
 
-    public function show(Order $order, DiscountService $discountService): JsonResponse
+    public function show(Order $order, FormatOrder $action): JsonResponse
     {
-        $order->load('products');
-
-        $subtotal = $order->products->sum(function ($product) {
-            return $product->pivot->quantity * $product->price;
-        });
-
-        $discounted = $discountService->applyDiscounts($order, $subtotal);
-
-        return response()->json([
-            'order_id' => $order->id,
-            'products' => $order->products->map(function ($product) {
-                return [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'price' => $product->price,
-                    'quantity' => $product->pivot->quantity,
-                    'total' => $product->pivot->quantity * $product->price,
-                ];
-            }),
-            ...$discounted
-        ]);
+        return response()->json(
+            $action->handle($order),
+            Response::HTTP_OK
+        );
     }
 }

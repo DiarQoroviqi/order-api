@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\CustomerOrderController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderProductController;
 use App\Http\Controllers\Api\ProductController;
@@ -10,6 +11,7 @@ Route::prefix('customers')
     ->name('api.customers.')
     ->group(function () {
         Route::post('/', [CustomerController::class, 'store'])->name('store');
+        Route::get('{customer}/orders', [CustomerOrderController::class, 'index'])->name('orders.index');
     });
 
 Route::prefix('products')
