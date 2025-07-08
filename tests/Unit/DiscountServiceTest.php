@@ -28,7 +28,7 @@ class DiscountServiceTest extends TestCase
     public function test_it_applies_only_order_over_100_discount()
     {
         $customer = Customer::factory()->create();
-        Order::factory()->create(['customer_id' => $customer->id]); // 1 past order
+        Order::factory()->create(['customer_id' => $customer->id]);
 
         \DB::table('special_days')->truncate();
 
@@ -42,7 +42,7 @@ class DiscountServiceTest extends TestCase
         $result = $discountService->apply($order, $subtotal);
 
         $this->assertEquals(120.00, $result['subtotal']);
-        $this->assertCount(1, $result['discounts']); // Only 1 discount should apply
+        $this->assertCount(1, $result['discounts']);
         $this->assertEquals('Order > 100€', $result['discounts'][0]['name']);
         $this->assertEquals(12.00, $result['discounts'][0]['amount']);
         $this->assertEquals(108.00, $result['total']);
