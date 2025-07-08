@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\CustomerController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('customers')
@@ -14,4 +15,10 @@ Route::prefix('products')
     ->name('api.products.')
     ->group(function () {
         Route::post('/', [ProductController::class, 'store'])->name('store');
+    });
+
+Route::prefix('orders')
+    ->name('api.orders.')
+    ->group(function () {
+        Route::post('/', [OrderController::class, 'store'])->name('store');
     });
