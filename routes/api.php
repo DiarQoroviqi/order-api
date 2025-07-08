@@ -22,7 +22,7 @@ Route::prefix('orders')
     ->name('api.orders.')
     ->group(function () {
         Route::post('/', [OrderController::class, 'store'])->name('store');
-        Route::post('/{order}/products', [OrderController::class, 'addProduct'])->name('add-product');
+        Route::get('{order}', [OrderController::class, 'show'])->name('show');
     });
 
 Route::prefix('orders/{order}/products')
