@@ -25,6 +25,29 @@ class DiscountServiceTest extends TestCase
         SpecialDay::factory()->create(['date' => now()->toDateString()]);
     }
 
+    public function test_it_applies_only_order_over_100_discount()
+    {
+        $customer = Customer::factory()->create();
+        Order::factory()->create(['customer_id' => $customer->id]); // 1 past order
+
+        \DB::table('special_days')->truncate();
+
+        $order = Order::factory()->create(['customer_id' => $customer->id]);
+
+        $product = Product::factory()->create(['price' => 60]);
+        $order->products()->attach($product->id, ['quantity' => 2]);
+
+        $discountService = new DiscountService();
+        $subtotal = 120;
+        $result = $discountService->apply($order, $subtotal);
+
+        $this->assertEquals(120.00, $result['subtotal']);
+        $this->assertCount(1, $result['discounts']); // Only 1 discount should apply
+        $this->assertEquals('Order > 100€', $result['discounts'][0]['name']);
+        $this->assertEquals(12.00, $result['discounts'][0]['amount']);
+        $this->assertEquals(108.00, $result['total']);
+    }
+
     public function test_it_applies_loyalty_discount()
     {
         $customer = Customer::factory()->create();
