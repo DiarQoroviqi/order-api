@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Actions\ListCustomerOrders;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
-use App\Services\Discount\DiscountService;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class CustomerOrderController extends Controller
